@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,7 +35,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int? x;
   int? y;
-
+  int total = 0;
+  String equation ='';
+  
   int _add(int x, int y){return 0;}
   int _sub(int x, int y){return 0;}
   int _mult(int x, int y){return 0;}
@@ -120,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
                           ),
-                          child: Icon(Icons.add, color: Colors.blue[900],)) ,
+                          child: Text('DEL', style: TextStyle(color: Colors.blue[900]),)) ,
                         ),
                         //AC
                         Expanded(
@@ -130,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
                           ),
-                          child: Icon(Icons.add, color: Colors.blue[900],)) ,
+                          child: Text('AC', style: TextStyle(color: Colors.blue[900]),)) ,
                         ),
                           
                       ]
@@ -191,7 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
                           ),
-                          child: Icon(Icons.add, color: Colors.blue[900],)) ,
+                          child: Icon(CupertinoIcons.multiply, color: Colors.blue[900],)) ,
                         ),
                         //div
                         Expanded(
@@ -201,7 +204,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
                           ),
-                          child: Icon(Icons.add, color: Colors.blue[900],)) ,
+                          child: Icon(CupertinoIcons.divide, color: Colors.blue[900],)) ,
                         ),
                           
                       ]
@@ -262,7 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
                           ),
-                          child: Icon(Icons.add, color: Colors.blue[900],)) ,
+                          child: Icon(CupertinoIcons.add, color: Colors.blue[900],)) ,
                         ),
                         //sub
                         Expanded(
@@ -272,7 +275,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
                           ),
-                          child: Icon(Icons.add, color: Colors.blue[900],)) ,
+                          child: Icon(CupertinoIcons.minus, color: Colors.blue[900],)) ,
                         ),
                           
                       ]
@@ -291,7 +294,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
                           ),
-                          child: Icon(Icons.add, color: Colors.blue[900],)) ,
+                          child: Text('+/-', style: TextStyle(color: Colors.blue[900]),)) ,
                         ),
                         //[0]
                         Expanded(
@@ -315,7 +318,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
                           ),
-                          child: Icon(Icons.add, color: Colors.blue[900],)) ,
+                          child: Text('.', style: TextStyle(color: Colors.blue[900], fontSize: 33),)) ,
                         ),
                         //percent
                         Expanded(
@@ -325,7 +328,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
                           ),
-                          child: Icon(Icons.add, color: Colors.blue[900],)) ,
+                          child: Icon(CupertinoIcons.percent, color: Colors.blue[900],)) ,
                         ),
                         // = 
                         Expanded(
@@ -335,7 +338,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
                           ),
-                          child: Icon(Icons.add, color: Colors.blue[900],)) ,
+                          child: Icon(CupertinoIcons.equal, color: Colors.blue[900],)) ,
                         ),
                           
                       ]
