@@ -34,14 +34,71 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int? x;
-  int? y;
-  int total = 0;
-  String equation ='';
+  int? total;
+  String num = '';
+  String _equation = '';
+  List digits = ['0','1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  List operators = ['+', '-', '÷','×'];
+
   
-  int _add(int x, int y){return 0;}
-  int _sub(int x, int y){return 0;}
-  int _mult(int x, int y){return 0;}
-  int _div(int x, int y){return 0;}
+  int? _add(int x){
+    if(total == null)
+      total = x;
+    else
+      total = total! + x;
+    return total;
+  }
+  int _sub(int x){return 0;}
+  int _mult(int x){return 0;}
+  int _div(int x,){return 0;}
+
+  void _appendToEquation(String s) {
+    setState(() {
+      // update the visible equation string
+      if (_equation == '') {
+        for(var i in digits){
+          if(s == i) {
+            _equation = s;
+            num = s;
+          }}
+          return;
+      } else {
+          if(num.length < 10) {
+            _equation = _equation + s;
+            for(var i in operators){
+              if(s == i) {
+                num = '';
+              }
+            }
+            for(var i in digits){
+              if(s == i) {
+                num = num + s;
+              }
+            }
+          }
+          else {return;}
+      }
+    });
+  }
+  void _delFromEquation() {
+    setState(() {
+      // update the visible equation string
+      if (num == '') {
+        return;
+      } else {
+        _equation = _equation.substring(0, _equation.length - 1);
+        num =num.substring(0, num.length -1);
+      }
+    });
+  }
+  void _ACequation(){
+    setState(() {
+      _equation = '';
+      num= '';
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -52,16 +109,33 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Flexible(
-              flex: 1,
-              child: Container(
-                color: Colors.blue[100],
+            Expanded(
+              child: Directionality(
+                textDirection: TextDirection.ltr, // Ensures RTL behavior
+                child: Stack(
+                  children: [
+                    Container(color: Colors.blue[100]),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(_equation, style: TextStyle(color: Colors.black),),
+                    ),
+                  ],
+                ),
               ),
             ),
             Expanded(
               flex: 3,
-              child: Container(
-                color: Colors.blue[200],
+              child: Directionality(
+                textDirection: TextDirection.ltr, // Ensures RTL behavior
+                child: Stack(
+                  children: [
+                    Container(color: Colors.blue[200]),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(num, style: TextStyle(color: Colors.black),),
+                    ),
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -76,11 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //[7]
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                            if (x == null){
-                              x =7;
-                            } else {
-                              y = 7;
-                            }
+                            _appendToEquation('7');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -90,11 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //[8]
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                            if (x == null){
-                              x =8;
-                            } else {
-                              y = 8;
-                            }
+                            _appendToEquation('8');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -104,11 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //[9]
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                             if (x == null){
-                              x =9;
-                            } else {
-                              y = 9;
-                            }
+                             _appendToEquation('9');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -118,7 +180,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //DEL
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                            final result = _add(0, 0);
+                            _delFromEquation();
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -128,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //AC
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                            final result = _add(0, 0);
+                            _ACequation();
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -147,11 +209,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //[4]
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                             if (x == null){
-                              x =4;
-                            } else {
-                              y = 4;
-                            }
+                             _appendToEquation('4');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -161,11 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //[5]
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                             if (x == null){
-                              x =5;
-                            } else {
-                              y = 5;
-                            }
+                             _appendToEquation('5');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -175,11 +229,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //[6]
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                             if (x == null){
-                              x =6;
-                            } else {
-                              y = 6;
-                            }
+                             _appendToEquation('6');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -189,7 +239,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //mult
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                            final result = _add(0, 0);
+                            _appendToEquation('×');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -199,7 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //div
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                            final result = _add(0, 0);
+                            _appendToEquation('÷');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -218,11 +268,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //[1]
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                             if (x == null){
-                              x =1;
-                            } else {
-                              y = 1;
-                            }
+                             _appendToEquation('1');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -232,11 +278,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //[2]
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                             if (x == null){
-                              x =2;
-                            } else {
-                              y = 2;
-                            }
+                             _appendToEquation('2');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -246,11 +288,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //[3]
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                             if (x == null){
-                              x =3;
-                            } else {
-                              y = 3;
-                            }
+                             _appendToEquation('3');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -260,7 +298,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         //add
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                            final result = _add(0, 0);
+                            _appendToEquation('+');
+                            _add(int.parse(num));
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -270,7 +309,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //sub
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                            final result = _add(0, 0);
+                            _appendToEquation('-');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -289,7 +328,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //sign
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                            final result = _add(0, 0);
+                            _appendToEquation('');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -299,11 +338,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //[0]
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                             if (x == null){
-                              x =0;
-                            } else {
-                              y = 0;
-                            }
+                             _appendToEquation('0');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -313,7 +348,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //.
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                            final result = _add(0, 0);
+                            _appendToEquation('.');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -323,7 +358,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //percent
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                            final result = _add(0, 0);
+                            _appendToEquation('%');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -333,7 +368,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         // = 
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                            final result = _add(0, 0);
+                            _appendToEquation('=');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
