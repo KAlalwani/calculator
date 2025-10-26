@@ -41,11 +41,13 @@ class _MyHomePageState extends State<MyHomePage> {
   List operators = ['+', '-', '÷','×'];
 
   
-  int? _add(int x){
+  int? _add(){
     if(total == null)
-      total = x;
-    else
-      total = total! + x;
+      total = int.tryParse(num);
+    else {
+      final int addend = int.tryParse(num) ?? 0;
+      total = total! + addend;
+    }
     return total;
   }
   int _sub(int x){return 0;}
@@ -95,6 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _equation = '';
       num= '';
+      total = null;
     });
   }
 
@@ -132,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Container(color: Colors.blue[200]),
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(num, style: TextStyle(color: Colors.black),),
+                      child: Text(total?.toString() ?? '', style: TextStyle(color: Colors.black),),
                     ),
                   ],
                 ),
@@ -298,8 +301,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         //add
                         Expanded(
                           child:OutlinedButton(onPressed: (){
+                            _add();
                             _appendToEquation('+');
-                            _add(int.parse(num));
+                            
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
