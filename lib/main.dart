@@ -50,7 +50,15 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     return total;
   }
-  int _sub(int x){return 0;}
+  int? _sub(){
+    if(total == null)
+      total = int.tryParse(num);
+    else {
+      final int addend = int.tryParse(num) ?? 0;
+      total = total! - addend;
+    }
+    return total;
+  }
   int _mult(int x){return 0;}
   int _div(int x,){return 0;}
 
@@ -313,6 +321,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //sub
                         Expanded(
                           child:OutlinedButton(onPressed: (){
+                            _sub();
                             _appendToEquation('-');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
