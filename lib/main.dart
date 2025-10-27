@@ -1,3 +1,5 @@
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -34,61 +36,169 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int? x;
-  int? total;
+  double? total;
   String num = '';
   String _equation = '';
   List digits = ['0','1', '2', '3', '4', '5', '6', '7', '8', '9'];
-  List operators = ['+', '-', '÷','×'];
-
+  List operators = ['+', '-', '÷','×', '='];
+  bool fraction = false;
+  String show ="";
+  int? current_operator;
   
-  int? _add(){
-    if(total == null)
-      total = int.tryParse(num);
-    else {
-      final int addend = int.tryParse(num) ?? 0;
-      total = total! + addend;
-    }
+  double? _add(){
+      final double addend = double.tryParse(num) ?? 0;
+      setState(() {
+        total = total! + addend;
+        show = total.toString();
+        num = '';
+      });
     return total;
   }
-  int? _sub(){
-    if(total == null)
-      total = int.tryParse(num);
-    else {
-      final int addend = int.tryParse(num) ?? 0;
-      total = total! - addend;
-    }
+  double? _sub(){
+      final double addend = double.tryParse(num) ?? 0;
+      setState(() {
+        total = total! - addend;
+        show = total.toString();
+        num = '';
+      });
     return total;
   }
-  int _mult(int x){return 0;}
-  int _div(int x,){return 0;}
+  double? _mult(){
 
-  void _appendToEquation(String s) {
+      final double addend = double.tryParse(num) ?? 0;
+      setState(() {
+        total = total! * addend;
+        show = total.toString();
+        num = '';
+      });
+    return total;
+  }
+  double? _div(){
+      final double addend = double.tryParse(num) ?? 0;
+      setState(() {
+        total = total! / addend;
+        show = total.toString();
+        num = '';
+      });
+    return total;
+  }
+  void _equals() {
     setState(() {
-      // update the visible equation string
-      if (_equation == '') {
-        for(var i in digits){
-          if(s == i) {
-            _equation = s;
-            num = s;
-          }}
-          return;
-      } else {
-          if(num.length < 10) {
-            _equation = _equation + s;
-            for(var i in operators){
-              if(s == i) {
-                num = '';
-              }
-            }
-            for(var i in digits){
-              if(s == i) {
-                num = num + s;
-              }
+      // Handle the last number if one is being entered
+      if (num.isNotEmpty) {
+        double? lastNum = double.tryParse(num);
+        if (lastNum != null) {
+          if (total == null) {
+            total = lastNum;
+          } else if (current_operator != null) {
+            // Apply the last operation
+            switch (current_operator) {
+              case 0: total = total! + lastNum; break;
+              case 1: total = total! - lastNum; break;
+              case 2: total = total! / lastNum; break;
+              case 3: total = total! * lastNum; break;
             }
           }
-          else {return;}
+        }
       }
+      show = total?.toString() ?? '';
+      num = '';
+      current_operator = null;
     });
+  }
+  
+bool number(String s) {
+  bool changed = false;
+  if (num.isEmpty && digits.contains(s)) {
+    num = s;
+    changed = true;
+  }
+  else if (num.isNotEmpty && digits.contains(s)) {
+    if (num.length < 10) {
+      num += s;
+      changed = true;
+    }
+  }
+  else if (num.isNotEmpty && s == '.' && !fraction) {
+    num += '.';
+    fraction = true;
+    changed = true;
+  }
+  
+  if (changed) {
+    setState(() {
+      // State is already updated in the variables above
+      show = num;  // Update display immediately
+    });
+    return true;
+  }
+  return false;
+}
+  
+  void _appendToEquation(String s) {
+    setState(() {
+      // Prevent operator at start
+      // if (_equation == '' && operators.contains(s)) {
+      //   return;
+      // }
+      // the first input must be digit
+      if (_equation == '' && number(s)) {
+          _equation += s;
+          show = num;
+          return;
+      }
+      
+
+      //The input is an operator
+      else if(number(s) && operators.contains(_equation[_equation.length -1])){
+        _equation += s;
+      }
+      else if (num != '' &&operators.contains(s)) {
+        show = '';
+        if(s != '=')
+        _equation += s;
+        double? temp = double.tryParse(num);
+        
+        if (total == null) {
+          total = temp ?? 0;
+          current_operator = operators.indexOf(s);
+          show = total.toString();
+          num = '';
+        } 
+        else if(current_operator != null) {
+          switch (current_operator) {
+            case 0:
+              _add();
+              break;
+            case 1:
+              _sub();
+              break;
+            case 2:
+              _div();
+              break;
+            case 3:
+              _mult();
+              break;
+            case 4:
+              _equals();
+              break;
+          }
+          current_operator = operators.indexOf(s);
+          if(current_operator == 4) current_operator = null;
+        }
+        return;
+      }
+      // else if(s != '=' && _equation.length >= 2 && 
+      //         !operators.contains(_equation[_equation.length - 1]) && 
+      //         total != null) {
+      //             show = '';
+      //             _equation += s;
+      //             current_operator = operators.indexOf(s);}
+      // ignore: curly_braces_in_flow_control_structures
+      else return;
+    }
+    
+    );
   }
   void _delFromEquation() {
     setState(() {
@@ -101,11 +211,14 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
   }
+  // ignore: non_constant_identifier_names
   void _ACequation(){
     setState(() {
       _equation = '';
       num= '';
       total = null;
+      show = '';
+      current_operator = null;
     });
   }
 
@@ -143,7 +256,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Container(color: Colors.blue[200]),
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(total?.toString() ?? '', style: TextStyle(color: Colors.black),),
+                      child: Text(show, style: TextStyle(color: Colors.black),),
                     ),
                   ],
                 ),
@@ -309,9 +422,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //add
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                            _add();
                             _appendToEquation('+');
-                            
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
                             shape: RoundedRectangleBorder( borderRadius: BorderRadius.zero)
@@ -321,7 +432,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         //sub
                         Expanded(
                           child:OutlinedButton(onPressed: (){
-                            _sub();
                             _appendToEquation('-');
                           }, style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.blue[300],
